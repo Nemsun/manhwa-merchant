@@ -1,0 +1,9 @@
+# Scrape artifacts
+*.bak
+scripts/scrape.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/

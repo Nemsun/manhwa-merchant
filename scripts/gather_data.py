@@ -60,11 +60,15 @@ def strip_html(text: str | None) -> str | None:
     return re.sub(r'<[^>]+>', ' ', text).strip()
 
 
-def parse_tags(tags_list: list[dict], rank_threshold: int = 20) -> str:
+def parse_tags(tags_list: list[dict], rank_threshold: int = 0) -> str:
     """
     Return a pipe-delimited string of 'name:rank' pairs for tags whose
     rank exceeds the threshold.  Preserving the rank allows the recommender
     to weight tags rather than treating them as binary features.
+
+    The default threshold is 0 (store every ranked tag). Rank-based
+    filtering and tag-block down-weighting are deferred to the notebook so
+    the cutoff can be tuned without re-hitting the API on every experiment.
 
     Example output: "Action:85|Fantasy:92|Romance:78"
     """
@@ -105,7 +109,8 @@ def flatten_media_item(item: dict[str, Any]) -> dict[str, Any]:
         'score':       item.get('averageScore'),
         'popularity':  item.get('popularity'),
         'genres':      "|".join(genres_list),
-        # Tags stored as name:rank pairs so rank data isn't discarded
+        # Tags stored unfiltered as name:rank pairs; rank filtering happens
+        # downstream in the notebook so the threshold stays tunable.
         'tags':        parse_tags(tags_list),
         'main_char':   parse_main_character(item.get('characters')),
         # HTML stripped so text features aren't polluted with markup tokens
