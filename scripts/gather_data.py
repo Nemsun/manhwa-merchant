@@ -60,7 +60,7 @@ def strip_html(text: str | None) -> str | None:
     return re.sub(r'<[^>]+>', ' ', text).strip()
 
 
-def parse_tags(tags_list: list[dict], rank_threshold: int = 70) -> str:
+def parse_tags(tags_list: list[dict], rank_threshold: int = 20) -> str:
     """
     Return a pipe-delimited string of 'name:rank' pairs for tags whose
     rank exceeds the threshold.  Preserving the rank allows the recommender
